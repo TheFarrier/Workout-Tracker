@@ -3,9 +3,22 @@ const db = require("../models");
 module.exports = function(app) {
 
   // Create and exercise and push it to to the workout at the specified id
+  // app.put("/api/workouts/:id", function(req, res){
+  //   db.Exercise.create(req.body)
+  //     .then((excercise) => db.Workout.findOneAndUpdate({_id: req.params.id}, { $push: { excercises: excercise } }, { new: true }))
+  //     .then(workouts => {
+  //       res.json(workouts);
+  //     })
+  //     .catch(err => {
+  //       res.json(err);
+  //     });
+  // });
+  
   app.put("/api/workouts/:id", function(req, res){
-    db.Exercise.create(req.body)
-      .then(({ _id }) => db.User.findOneAndUpdate({_id: req.params.id}, { $push: { excercises: _id } }, { new: true }))
+    console.log(req.body)
+    db.Workout.findOneAndUpdate(
+      {_id: req.params.id}, 
+      { $push: { exercises: req.body } })
       .then(workouts => {
         res.json(workouts);
       })
@@ -13,10 +26,10 @@ module.exports = function(app) {
         res.json(err);
       });
   });
-  
+
   // Create a new workout
   app.post("/api/workouts/", function(req, res){
-    db.Workout.create(req.body)
+    db.Workout.create({})
       .then(workouts => {
         res.json(workouts);
       })
